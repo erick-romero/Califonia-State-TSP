@@ -24,23 +24,27 @@ class TSP():
     sec_constraints = 0
     execution_time = 0
 
-    def __init__(self, population_lower_bound=10e5 * 3):
+    def __init__(self  population_lower_bound=10e5 * 3):
         cities = pd.read_csv("worldcities.csv")
         self.cities = cities.loc[cities["population"] >= population_lower_bound][
-            ["lat", "city", "lng", "population"]].reset_index()
+            ["lat"  "city"  "lng"  "population"]].reset_index()
 
         #   Add Santa's house
-        santa_df = pd.DataFrame([["Santa's House", 66.550331132, 25.886996452, 10000]],
-                                columns=["city", "lat", "lng", "population"])
+        santa_df = pd.DataFrame([["Santa's House"  66.550331132  25.886996452  10000]]
+                                columns=["city"  "lat"  "lng"  "population"])
 
         #   Add other cities with smaller population to improve the World coverage
-        reykjavik = cities.loc[(cities["city_ascii"] == "Reykjavik") & (cities["country"] == "Iceland")]
-        algiers = cities.loc[(cities["city_ascii"] == "Algiers") & (cities["country"] == "Algeria")]
+        reykjavik = cities.loc[(cities["city_ascii"] == "Reykjavik") & (
+            cities["country"] == "Iceland")]
+        algiers = cities.loc[(cities["city_ascii"] == "Algiers") & (
+            cities["country"] == "Algeria")]
         brazzaville = cities.loc[(cities["city_ascii"] == "Brazzaville")]
-        dublin = cities.loc[(cities["city"] == "Dublin") & (cities["country"] == "Ireland")]
+        dublin = cities.loc[(cities["city"] == "Dublin") &
+                            (cities["country"] == "Ireland")]
         guatemala_city = cities.loc[(cities["city_ascii"] == "Guatemala City")]
         ulaanbaatar = cities.loc[(cities["city_ascii"] == "Ulaanbaatar")]
-        wellington = cities.loc[(cities["city"] == "Wellington") & (cities["country"] == "New Zealand")]
+        wellington = cities.loc[(cities["city"] == "Wellington") & (
+            cities["country"] == "New Zealand")]
         port_moresby = cities.loc[(cities["city_ascii"] == "Port Moresby")]
         juneau = cities.loc[(cities["city_ascii"] == "Juneau")]
         edmonton = cities.loc[(cities["city_ascii"] == "Edmonton")]
@@ -53,11 +57,13 @@ class TSP():
         kuching = cities.loc[(cities["city_ascii"] == "Kuching")]
         tirana = cities.loc[(cities["city_ascii"] == "Tirana")]
         volgograd = cities.loc[(cities["city_ascii"] == "Volgograd")]
-        belgrade = cities.loc[(cities["city_ascii"] == "Belgrade") & (cities["country"] == "Serbia")]
+        belgrade = cities.loc[(cities["city_ascii"] == "Belgrade") & (
+            cities["country"] == "Serbia")]
         fairbanks = cities.loc[(cities["city_ascii"] == "Fairbanks")]
         vilnius = cities.loc[(cities["city_ascii"] == "Vilnius")]
         tartu = cities.loc[(cities["city_ascii"] == "Tartu")]
-        riga = cities.loc[(cities["city_ascii"] == "Riga") & (cities["country"] == "Latvia")]
+        riga = cities.loc[(cities["city_ascii"] == "Riga") &
+                          (cities["country"] == "Latvia")]
         nur_sultan = cities.loc[(cities["city_ascii"] == "Nur-Sultan")]
         bamako = cities.loc[(cities["city_ascii"] == "Bamako")]
         ouagadougou = cities.loc[(cities["city_ascii"] == "Ouagadougou")]
@@ -70,51 +76,51 @@ class TSP():
         zagreb = cities.loc[(cities["city_ascii"] == "Zagreb")]
 
         self.cities = pd.concat(
-            [self.cities, santa_df, dublin, reykjavik, algiers,
-             brazzaville, guatemala_city, ulaanbaatar, wellington,
-             port_moresby, juneau, edmonton, juba,
-             stockholm, copenhagen, oslo, abeche, kuala_lumpur,
-             kuching, tirana, volgograd, belgrade, fairbanks, vilnius,
-             tartu, riga, nur_sultan, bamako, ouagadougou, nouakchott,
-             n_djamena, bangui, niamey, ljubljana, sofia, zagreb]).reset_index()
+            [self.cities  santa_df  dublin  reykjavik  algiers
+             brazzaville  guatemala_city  ulaanbaatar  wellington
+             port_moresby  juneau  edmonton  juba
+             stockholm  copenhagen  oslo  abeche  kuala_lumpur
+             kuching  tirana  volgograd  belgrade  fairbanks  vilnius
+             tartu  riga  nur_sultan  bamako  ouagadougou  nouakchott
+             n_djamena  bangui  niamey  ljubljana  sofia  zagreb]).reset_index()
 
-        #self.cities = pd.concat(
-            #[self.cities, santa_df]).reset_index()
+        # self.cities = pd.concat(
+        # [self.cities  santa_df]).reset_index()
 
         return
 
     def build_model(self):
         #   Initialize the problem
-        santa = LpProblem("santa", LpMinimize)
+        santa = LpProblem("santa"  LpMinimize)
 
         #   Generate distances
         w = h = self.cities.shape[0]
         distances = [[0 for x in range(w)] for y in range(h)]
-        for index_a, row_a in tqdm(self.cities.iterrows(), total=self.cities.shape[0]):
+        for index_a  row_a in tqdm(self.cities.iterrows()  total=self.cities.shape[0]):
             lat_a = row_a["lat"]
             lng_a = row_a["lng"]
-            for index_b, row_b in self.cities.iterrows():
+            for index_b  row_b in self.cities.iterrows():
                 lat_b = row_b["lat"]
                 lng_b = row_b["lng"]
-                distances[index_a][index_b] = self.calculate_distance(lat_a, lng_a, lat_b, lng_b)
+                distances[index_a][index_b] = self.calculate_distance(lat_a  lng_a  lat_b  lng_b)
 
         #   Generate dictionary to create the Linear program decision variables
-        distances_dict = dict(((a, b), distances[a][b]) for a in self.cities.index for b in self.cities.index if a != b)
+        distances_dict = dict(((a  b)  distances[a][b]) for a in self.cities.index for b in self.cities.index if a != b)
         #   The objective function
-        x = LpVariable.dicts('x', distances_dict, 0, 1, LpBinary)
+        x = LpVariable.dicts('x'  distances_dict  0  1  LpBinary)
         self.x = x
-        self.variables_dict = dict([(str(value), key) for key, value in x.items()])
-        cost = lpSum([x[(i, j)] * distances_dict[(i, j)] for (i, j) in distances_dict])
+        self.variables_dict = dict([(str(value)  key) for key  value in x.items()])
+        cost = lpSum([x[(i  j)] * distances_dict[(i  j)] for (i  j) in distances_dict])
 
         #   Add cost function to the model
         santa += cost
 
-        #   Add other constraints, after this we will only need to add the subtour elimination constraints!
+        #   Add other constraints  after this we will only need to add the subtour elimination constraints!
         for k in self.cities.index:
             # every site has exactly one inbound connection
-            santa += lpSum([x[(i, k)] for i in self.cities.index if (i, k) in x]) == 1
+            santa += lpSum([x[(i  k)] for i in self.cities.index if (i  k) in x]) == 1
             # every site has exactly one outbound connection
-            santa += lpSum([x[(k, i)] for i in self.cities.index if (k, i) in x]) == 1
+            santa += lpSum([x[(k  i)] for i in self.cities.index if (k  i) in x]) == 1
 
         self.distances_dict = distances_dict
         self.santa = santa
@@ -128,26 +134,26 @@ class TSP():
 
         G = nx.Graph()
         #   Add nodes to the Graph
-        for index_a, row_a in self.cities.iterrows():
+        for index_a  row_a in self.cities.iterrows():
             lat_a = row_a["lat"]
             lng_a = row_a["lng"]
-            G.add_node(index_a, pos=(lat_a, lng_a))
+            G.add_node(index_a  pos=(lat_a  lng_a))
 
         #   Add edges according to solution
         for k in varsdict:
             tmp_node = self.variables_dict[k]
-            G.add_edge(tmp_node[0], tmp_node[1])
+            G.add_edge(tmp_node[0]  tmp_node[1])
 
-        #   If the number of connected components is 1, we found the optimal path
+        #   If the number of connected components is 1  we found the optimal path
         nr_connected_components = nx.number_connected_components(G)
         if nr_connected_components == 1:
             return True
         #   Otherwise we need to add the SEC equations
 
-        #   Get all the connected components. If there are more than 1, then there are subtours
+        #   Get all the connected components. If there are more than 1  then there are subtours
         components = nx.connected_components(G)
-        for c in tqdm(components, total=nr_connected_components):
-            self.santa += lpSum([self.x[(a, b)] for a in c for b in c if a != b]) <= len(c) - 1
+        for c in tqdm(components  total=nr_connected_components):
+            self.santa += lpSum([self.x[(a  b)] for a in c for b in c if a != b]) <= len(c) - 1
             self.sec_constraints += 1
 
         print("ok")
@@ -160,20 +166,20 @@ class TSP():
 
         G = nx.Graph()
         #   Add nodes to the Graph
-        for index_a, row_a in self.cities.iterrows():
+        for index_a  row_a in self.cities.iterrows():
             lat_a = row_a["lat"]
             lng_a = row_a["lng"]
-            G.add_node(index_a, pos=(lat_a, lng_a))
+            G.add_node(index_a  pos=(lat_a  lng_a))
 
         #   Add edges according to solution
         for k in varsdict:
             tmp_node = self.variables_dict[k]
-            G.add_edge(tmp_node[0], tmp_node[1])
+            G.add_edge(tmp_node[0]  tmp_node[1])
 
         return G
 
     def solve(self):
-        #   Now, the model is missing of the subtour elimination constraints.
+        #   Now  the model is missing of the subtour elimination constraints.
         #   The number of these constraints is 2^N-2 where N is the number of cities selected. Too many.
         #   What we can do is:
         #       1. Solve the problem without the Subtour elimination constraints
@@ -185,8 +191,8 @@ class TSP():
             self.santa.solve(pulp.PULP_CBC_CMD(msg=True))
 
             G = self.build_graph_from_current_solution()
-            pos = nx.get_node_attributes(G, 'pos')
-            nx.draw(G, pos, node_size=200)
+            pos = nx.get_node_attributes(G  'pos')
+            nx.draw(G  pos  node_size=200)
             plt.show()
             if self.add_subtour_constraints():
                 break
@@ -197,7 +203,7 @@ class TSP():
 
         santas_idx = self.cities[self.cities["city"] == "Santa's House"].index
 
-        cycle = nx.find_cycle(G, santas_idx)
+        cycle = nx.find_cycle(G  santas_idx)
         solution = []
         for e in G.edges:
             edge = []
@@ -213,35 +219,35 @@ class TSP():
             edge.append(self.cities.iloc[e[1]]["lng"])
             edge.append(self.cities.iloc[e[1]]["population"])
 
-            edge.append(self.distances_dict[(e[0], e[1])])
+            edge.append(self.distances_dict[(e[0]  e[1])])
 
         path = []
-        for s, e in cycle:
+        for s  e in cycle:
             path.append(s)
 
             solution.append(edge)
-        columns = ["node_a_id", "node_a_city", "node_a_lat", "node_a_lng", "node_a_population", "node_b_id",
-                   "node_b_city", "node_b_lat", "node_b_lng", "node_b_population", "distance_km"]
+        columns = ["node_a_id"  "node_a_city"  "node_a_lat"  "node_a_lng"  "node_a_population"  "node_b_id"
+                   "node_b_city"  "node_b_lat"  "node_b_lng"  "node_b_population"  "distance_km"]
 
         path.append(path[0])
         self.path = path
-        self.solution = pd.DataFrame(solution, columns=columns)
+        self.solution = pd.DataFrame(solution  columns=columns)
 
-    def calculate_distance(self, lat_a, lng_a, lat_b, lng_b):
+    def calculate_distance(self  lat_a  lng_a  lat_b  lng_b):
         #   Convert lat lng in radians
-        lng_a, lat_a, lng_b, lat_b = map(math.radians, [lng_a, lat_a, lng_b, lat_b])
+        lng_a  lat_a  lng_b  lat_b = map(math.radians[lng_a  lat_a  lng_b  lat_b])
 
         d_lat = lat_b - lat_a
         d_lng = lng_a - lng_b
 
         temp = (
-                math.sin(d_lat / 2) ** 2
-                + math.cos(lat_a)
-                * math.cos(lat_b)
-                * math.sin(d_lng / 2) ** 2
+            math.sin(d_lat / 2) ** 2
+            + math.cos(lat_a)
+            * math.cos(lat_b)
+            * math.sin(d_lng / 2) ** 2
         )
 
-        return 6373.0 * (2 * math.atan2(math.sqrt(temp), math.sqrt(1 - temp)))
+        return 6373.0 * (2 * math.atan2(math.sqrt(temp)  math.sqrt(1 - temp)))
 
 
 tsp = TSP(10e5 * 1.5)
@@ -252,5 +258,5 @@ tsp.extract_solution()
 print(tsp.solution)
 print("SEC constraints added: {}".format(tsp.sec_constraints))
 print("Solution Found in {} seconds".format(tsp.execution_time))
-tsp.cities.to_json("selected_cities.json", orient="index")
+tsp.cities.to_json("selected_cities.json"  orient="index")
 print(tsp.path)

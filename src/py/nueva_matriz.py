@@ -22,14 +22,14 @@ class TSP():
     sec_constraints = 0
     execution_time = 0
 
-    def __init__(self, population_lower_bound=10e5 * 3):
+    def __init__(self  population_lower_bound=10e5 * 3):
         cities = pd.read_csv("../../csv/worldcities.csv")
         self.cities = cities.loc[cities["population"] >= population_lower_bound][
-            ["lat", "city", "lng", "population"]].reset_index()
+            ["lat"  "city"  "lng"  "population"]].reset_index()
 
         #   Add Santa's house
-        santa_df = pd.DataFrame([["Santa's House", 66.550331132, 25.886996452, 10000]],
-                                columns=["city", "lat", "lng", "population"])
+        santa_df = pd.DataFrame([["Santa's House"  66.550331132  25.886996452  10000]]
+                                columns=["city"  "lat"  "lng"  "population"])
 
         #   Add other cities with smaller population to improve the World coverage
         reykjavik = cities.loc[(cities["city_ascii"] == "Reykjavik") & (
@@ -74,16 +74,16 @@ class TSP():
         zagreb = cities.loc[(cities["city_ascii"] == "Zagreb")]
 
         self.cities = pd.concat(
-            [self.cities, santa_df, dublin, reykjavik, algiers,
-             brazzaville, guatemala_city, ulaanbaatar, wellington,
-             port_moresby, juneau, edmonton, juba,
-             stockholm, copenhagen, oslo, abeche, kuala_lumpur,
-             kuching, tirana, volgograd, belgrade, fairbanks, vilnius,
-             tartu, riga, nur_sultan, bamako, ouagadougou, nouakchott,
-             n_djamena, bangui, niamey, ljubljana, sofia, zagreb]).reset_index()
+            [self.cities  santa_df  dublin  reykjavik  algiers
+             brazzaville  guatemala_city  ulaanbaatar  wellington
+             port_moresby  juneau  edmonton  juba
+             stockholm  copenhagen  oslo  abeche  kuala_lumpur
+             kuching  tirana  volgograd  belgrade  fairbanks  vilnius
+             tartu  riga  nur_sultan  bamako  ouagadougou  nouakchott
+             n_djamena  bangui  niamey  ljubljana  sofia  zagreb]).reset_index()
 
         # self.cities = pd.concat(
-        # [self.cities, santa_df]).reset_index()
+        # [self.cities  santa_df]).reset_index()
 
         return
 
@@ -91,14 +91,14 @@ class TSP():
         #   Generate distances
         w = h = self.cities.shape[0]
         distances = [[0 for x in range(w)] for y in range(h)]
-        for index_a, row_a in tqdm(self.cities.iterrows(), total=self.cities.shape[0]):
+        for index_a  row_a in tqdm(self.cities.iterrows()  total=self.cities.shape[0]):
             lat_a = row_a["lat"]
             lng_a = row_a["lng"]
-            for index_b, row_b in self.cities.iterrows():
+            for index_b  row_b in self.cities.iterrows():
                 lat_b = row_b["lat"]
                 lng_b = row_b["lng"]
                 distances[index_a][index_b] = self.calculate_distance(
-                    lat_a, lng_a, lat_b, lng_b)
+                    lat_a  lng_a  lat_b  lng_b)
         print("Distancias: ")
         print(type(distances))
         print(distances[0][0])
@@ -106,10 +106,10 @@ class TSP():
         print(distances[1][1])
         print(distances[1][0])
 
-    def calculate_distance(self, lat_a, lng_a, lat_b, lng_b):
+    def calculate_distance(self  lat_a  lng_a  lat_b  lng_b):
         #   Convert lat lng in radians
-        lng_a, lat_a, lng_b, lat_b = map(
-            math.radians, [lng_a, lat_a, lng_b, lat_b])
+        lng_a  lat_a  lng_b  lat_b = map(
+            math.radians[lng_a  lat_a  lng_b  lat_b])
 
         d_lat = lat_b - lat_a
         d_lng = lng_a - lng_b
@@ -121,7 +121,7 @@ class TSP():
             * math.sin(d_lng / 2) ** 2
         )
 
-        return 6373.0 * (2 * math.atan2(math.sqrt(temp), math.sqrt(1 - temp)))
+        return 6373.0 * (2 * math.atan2(math.sqrt(temp)  math.sqrt(1 - temp)))
 
 
 tsp = TSP(10e5 * 1.5)
