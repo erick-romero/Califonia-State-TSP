@@ -1,0 +1,15 @@
+Result - Optimal solution found
+
+Objective value:                2263.73100000
+Enumerated nodes:               532
+Total iterations:               12107
+Time (CPU seconds):             79.38
+Time (Wallclock seconds):       79.38
+
+Total time (CPU seconds):       79.39   (Wallclock seconds):       79.39
+
+cycle_idx: [1, 51, 106, 57, 91, 40, 22, 63, 24, 45, 43, 19, 56, 83, 67, 34, 3, 48, 39, 108, 102, 70, 65, 4, 61, 52, 8, 109, 87, 37, 15, 93, 64, 46, 49, 26, 101, 60, 77, 80, 84, 47, 90, 111, 6, 31, 13, 92, 18, 96, 72, 5, 44, 9, 30, 32, 50, 79, 17, 69, 20, 28, 110, 29, 35, 107, 98, 33, 73, 12, 21, 104, 97, 99, 62, 66, 75, 89, 38, 68, 14, 2, 59, 27, 76, 100, 105, 42, 11, 16, 54, 86, 23, 82, 25, 10, 41, 94, 58, 85, 53, 74, 71, 103, 95, 7, 78, 36, 88, 55, 81]
+Length: 111
+
+ 5 horas para encontrar solucion
+ gracias Julia
