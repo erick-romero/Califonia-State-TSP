@@ -1,10 +1,92 @@
 <!DOCTYPE html>
 <html>
-<body>
 
-<h1>My First Heading</h1>
+    <head>
+        <!--<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>-->
+        <script src="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.js"></script>
+        <link type="text/css" rel="stylesheet" href="https://api.mqcdn.com/sdk/mapquest-js/v1.3.2/mapquest.css"/>
 
-<p>My first paragraph.</p>
+        <link rel="stylesheet" href="css.css">
+    </head>
+        <body>
 
-</body>
+            <h1>California State, Travelling Salesman Problem Visualization</h1>
+
+            <div id="map"> 
+
+                <!--
+                <script>
+                    
+                    var mymap = L.map('mapid').setView([36.778259, -119.417931], 6.5);
+                    L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+                    maxZoom: 18,
+                    id: 'mapbox/streets-v11',
+                    tileSize: 512,
+                    zoomOffset: -1,
+                    accessToken: 'pk.eyJ1IjoiZXJpY2stcm9tZXJvIiwiYSI6ImNrZ2d5MGViOTEwZDEycnBpN3QzdTZ2bDUifQ.T2ajTOwmuwee204sW23PKw'
+                    }).addTo(mymap);
+                    var latlngs = [
+                                    [45.51, -122.68],
+                                    [37.77, -122.43],
+                                    [34.04, -118.2]
+                                                ];
+                    var polyline = L.polyline(latlngs, {color: 'red'}).addTo(mymap);                            
+                    mymap.fitBounds(polyline.getBounds());    
+                    
+                </script>
+                FUf8BeUy8XLFG6PTiC09ewTveSO694xd
+
+                lYrP4vF3Uk5zgTiGGuEzQGwGIVDGuy24
+                -->
+                <script>
+                    L.mapquest.key = 'lYrP4vF3Uk5zgTiGGuEzQGwGIVDGuy24';
+                    ciudades = ['Los Angeles','San Diego','San Jose','San Francisco','Fresno','Sacramento','Long Beach','Oakland','Bakersfield','Anaheim','Santa Ana','Riverside','Stockton','Chula Vista','Fremont','Irvine','San Bernardino','Modesto','Oxnard','Fontana','Moreno Valley','Glendale','Huntington Beach','Santa Clarita','Garden Grove','Santa Rosa','Oceanside','Rancho Cucamonga','Ontario','Lancaster','Elk Grove','Palmdale','Corona','Salinas','Pomona','Torrance','Hayward','Escondido','Sunnyvale','Pasadena','Fullerton','Orange','Thousand Oaks','Visalia','Simi Valley','Concord','Roseville','Santa Clara','Vallejo','Victorville','El Monte','Berkeley','Downey','Costa Mesa','Inglewood','Ventura','West Covina','Norwalk','Carlsbad','Fairfield','Richmond','Murrieta','Burbank','Antioch','Daly City','Temecula','Santa Maria','El Cajon','Rialto','San Mateo','Compton','Clovis','Jurupa Valley','South Gate','Vista','Mission Viejo','Vacaville','Carson','Hesperia','Redding','Santa Monica','Westminster','Santa Barbara','Chico','Whittier','Newport Beach','San Leandro','Hawthorne','San Marcos','Citrus Heights','Alhambra','Tracy','Livermore','Buena Park','Lakewood','Merced','Hemet','Chino','Menifee','Lake Forest','Napa','Redwood City','Bellflower','Indio','Tustin','Baldwin Park','Chino Hills','Mountain View','Alameda','Upland','Folsom']
+                    routa = [1, 51, 106, 57, 91, 40, 22, 63, 24, 45, 43, 19, 56, 83, 67, 34, 3, 48, 39, 108, 102, 70, 65, 4, 61, 52, 8, 109, 87, 37, 15, 93, 64, 46, 49, 26, 101, 60, 77, 80, 84, 47, 90, 111, 6, 31, 13, 92, 18, 96, 72, 5, 44, 9, 30, 32, 50, 79, 17, 69, 20, 28, 110, 29, 35, 107, 98, 33, 73, 12, 21, 104, 97, 99, 62, 66, 75, 89, 38, 68, 14, 2, 59, 27, 76, 100, 105, 42, 11, 16, 54, 86, 23, 82, 25, 10, 41, 94, 58, 85, 53, 74, 71, 103, 95, 7, 78, 36, 88, 55, 81,1]
+                    // 'map' refers to a <div> element with the ID map
+                        var map = L.mapquest.map('map', {
+                        center: [40.7128, -74.0059],
+                        layers: L.mapquest.tileLayer('map'),
+                        zoom: 13
+                        });
+
+
+                        
+
+                        for (var i = 0; i < 111; i++) 
+                        {
+                            var directions = L.mapquest.directions();
+                            directions.setLayerOptions({
+                            startMarker: {
+                            draggable: false
+                            },
+                            endMarker: {
+                                draggable: false
+                            },
+                            routeRibbon: {
+                                draggable: false
+                            }
+                            });
+                            directions.route({
+                            start: ciudades[routa[i]-1] +' California',
+                            end: ciudades[routa[i+1]-1] + ' California'
+                            });  
+                            console.log( ciudades[routa[i]-1]+ ' hacia ' + ciudades[routa[i+1]-1]); 
+                                
+                        }
+
+                        
+                    
+
+                </script>
+
+
+
+                
+            </div>
+
+
+
+        </body>
 </html>
