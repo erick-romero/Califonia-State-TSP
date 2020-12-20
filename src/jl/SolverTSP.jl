@@ -48,12 +48,12 @@ end
 
 #Se lee la informacion de nuestro archivo CSV
 matriz = readdlm("../../CSV/matrizDistanciasCSV.csv", ',', Float64)
-set_optimizer_attribute(m,  "logLevel" , 0)
 #N representa el numero de nodos en nuestro problema
 N=111
 
 #se instancia el modelo y se asigna el solver con el cual trabajaremos
 California = Model(Cbc.Optimizer)
+set_optimizer_attribute(California,  "logLevel" , 0)
 
 #se crean las variables de decision para cada nodo  y se agregan al modelo, de tipo binario
 @variable(California, x[1:N,1:N], Bin)
@@ -75,7 +75,11 @@ for i=1:N, j=1:N
 end
 #debido a que la distancia entre la misma ciudad es 0, se agrega una restriccion para que no se puedan conectar a si mismas
 for i=1:N
-    @constraint(California, x[i,i] == 0)
+    for j=1:N
+        if matriz[i,j]==0
+            @constraint(California, x[i,j] == 0)
+        end
+    end
 end
 
 #una vez se tiene todas las restricciones se llama el metodo optimizar el cual pasa el modelo de optimizacion
